@@ -26,7 +26,14 @@ function drawPlayer() {
     ctx.strokeRect(player.x, player.y, player.width, player.height);
 }
 
-function keyPush(event) {
+function flowTime() {
+    time.accu += time.speed;
+    if (time.accu % 255 == 0) {
+        time.speed *= -1;
+    }
+}
+
+function keyInput(event) {
     switch(event.keyCode) {
         case 37:
             if (player.x > player.minX) {
@@ -51,24 +58,18 @@ function keyPush(event) {
     }
 }
 
-function checkTime() {
-    time.accu += time.speed;
-    if (time.accu % 255 == 0) {
-        time.speed *= -1;
-    }
-}
-
 function loop() {
-    checkTime();
+    flowTime();
     drawBackground();
     drawPlayer();
 }
 
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var player = new Player(canvas, 90, 90, 30, 30, 15);
+var time = new Time();
+
 window.onload = function() {
-    canvas = document.getElementById("canvas");
-    player = new Player(canvas, 90, 90, 30, 30, 15);
-    time = new Time();
-    ctx = canvas.getContext("2d");
-    document.addEventListener("keydown", keyPush);
+    document.addEventListener("keydown", keyInput);
     setInterval(loop, 1000 / 60);
 };
