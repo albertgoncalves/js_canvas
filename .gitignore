@@ -1,5 +1,7 @@
 *
 !.gitignore
 !shell.nix
-!*.js
+!.jshintrc
 !*.html
+!*.js
+!*.css

@@ -1,45 +1,68 @@
-SX = 200;
-SY = 200;
-PX = canvas.width / 2 - (SX / 2);
-PY = canvas.height / 2 - (SY / 2);
-V = 25;
+class Player {
+    constructor(canvas, height, width, speed) {
+        this.width = width;
+        this.height = height;
+        this.x = canvas.width / 2 - (width / 2);
+        this.y = canvas.height / 2 - (height / 2);
+        this.speed = speed;
+        this.minX = 0;
+        this.maxX = canvas.width - width;
+        this.minY = 0;
+        this.maxY = canvas.height - height;
+    }
+}
 
 window.onload = function() {
     canvas = document.getElementById("canvas");
+    player = new Player(canvas, 30, 30, 15);
+    time = 0;
+    flow = 1;
     ctx = canvas.getContext("2d");
     document.addEventListener("keydown", keyPush);
-    setInterval(game, 1000/60);
+    setInterval(loop, 1000 / 60);
 };
+
+function drawBackground(ctx, time) {
+    ctx.fillStyle = `hsl(${time}, 10%, 25%)`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawPlayer(ctx) {
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(player.x, player.y, player.width, player.height);
+}
 
 function keyPush(event) {
     switch(event.keyCode) {
         case 37:
-            PX -= V;
+            if (player.x > player.minX) {
+                player.x -= player.speed;
+            }
             break;
         case 38:
-            PY -= V;
+            if (player.y > player.minY) {
+                player.y -= player.speed;
+            }
             break;
         case 39:
-            PX += V;
+            if (player.x < player.maxX) {
+                player.x += player.speed;
+            }
             break;
         case 40:
-            PY += V;
+            if (player.y < player.maxY) {
+                player.y += player.speed;
+            }
             break;
     }
 }
 
-function background(ctx) {
-    ctx.fillStyle = "hsl(255, 10%, 25%)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-function player(ctx) {
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 5;
-    ctx.strokeRect(PX, PY, SX, SY);
-}
-
-function game() {
-    background(ctx);
-    player(ctx, PX, PY);
+function loop() {
+    time += flow / 20;
+    if (time % 255 == 0) {
+        flow *= -1;
+    }
+    drawBackground(ctx, time);
+    drawPlayer(ctx, player.x, player.y);
 }
