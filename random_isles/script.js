@@ -1,7 +1,7 @@
 var CANVAS = document.getElementById("canvas");
 var N = 50;
-var X = CANVAS.width / N;
-var Y = CANVAS.height / N;
+var W = CANVAS.width / N;
+var H = CANVAS.height / N;
 var LAND = new HSL(120, 25, 50);
 var SAND = new HSL(35, 30, 75);
 var SURF = new HSL(210, 60, 55);
@@ -102,10 +102,10 @@ function flowTime() {
 function drawMap() {
     for (i = 0; i < (N - 1); i++) {
         for (j = 0; j < (N - 1); j++) {
-            x = (i * X) + (X / 2);
-            y = (j * Y) + (Y / 2);
+            x = (i * W) + (W / 2);
+            y = (j * H) + (H / 2);
             ctx.fillStyle = flowTerrain(x, y);
-            ctx.fillRect(x, y, X, Y);
+            ctx.fillRect(x, y, W, H);
         }
     }
 }
