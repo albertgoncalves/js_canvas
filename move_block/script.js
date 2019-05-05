@@ -1,8 +1,9 @@
 var CANVAS = document.getElementById("canvas");
-var CTX = CANVAS.getContext("2d");
-var PLAYER = new Player(90, 90, 15, 15, 15);
-var TIME = new Time(0.2);
-var FPS = document.getElementById("fps");
+
+var fps = document.getElementById("fps");
+var ctx = CANVAS.getContext("2d");
+var player = new Player(90, 90, 15, 15, 15);
+var time = new Time(0.2);
 
 function Player(x, y, height, width, speed) {
     this.width = width;
@@ -23,51 +24,51 @@ function Time(rate) {
 }
 
 function drawBackground() {
-    CTX.fillStyle = "hsl(" + String(TIME.accu) + ", 30%, 30%)";
-    CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
+    ctx.fillStyle = "hsl(" + String(time.accu) + ", 30%, 30%)";
+    ctx.fillRect(0, 0, CANVAS.width, CANVAS.height);
 }
 
 function drawPlayer() {
-    CTX.strokeStyle = "white";
-    CTX.lineWidth = 2;
-    CTX.strokeRect(PLAYER.x, PLAYER.y, PLAYER.width, PLAYER.height);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(player.x, player.y, player.width, player.height);
 }
 
 function flowTime() {
-    TIME.accu += TIME.rate;
-    if (TIME.accu % 255 == 0) {
-        TIME.rate *= -1;
+    time.accu += time.rate;
+    if (time.accu % 255 === 0) {
+        time.rate *= -1;
     }
 }
 
 function updateFPS() {
-    if (Math.floor(TIME.accu) % 30 == 0) {
-        elapsed = 1 / ((Date.now() - TIME.now) / 1000);
-        FPS.innerHTML = String(Math.floor(elapsed)) + " fps";
+    if (Math.floor(time.accu) % 30 === 0) {
+        elapsed = 1 / ((Date.now() - time.now) / 1000);
+        fps.innerHTML = String(Math.floor(elapsed)) + " fps";
     }
-    TIME.now = Date.now();
+    time.now = Date.now();
 }
 
 function keyDown(event) {
     switch(event.keyCode) {
     case 37:
-        if (PLAYER.x > PLAYER.minX) {
-            PLAYER.x -= PLAYER.speed;
+        if (player.x > player.minX) {
+            player.x -= player.speed;
         }
         break;
     case 38:
-        if (PLAYER.y > PLAYER.minY) {
-            PLAYER.y -= PLAYER.speed;
+        if (player.y > player.minY) {
+            player.y -= player.speed;
         }
         break;
     case 39:
-        if (PLAYER.x < PLAYER.maxX) {
-            PLAYER.x += PLAYER.speed;
+        if (player.x < player.maxX) {
+            player.x += player.speed;
         }
         break;
     case 40:
-        if (PLAYER.y < PLAYER.maxY) {
-            PLAYER.y += PLAYER.speed;
+        if (player.y < player.maxY) {
+            player.y += player.speed;
         }
         break;
     }

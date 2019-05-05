@@ -1,43 +1,126 @@
 var CANVAS = document.getElementById("canvas");
-var CTX = CANVAS.getContext("2d");
-var N = 18;
+var N = 50;
 var X = CANVAS.width / N;
 var Y = CANVAS.height / N;
-var LAND = "hsl(125, 35%, 50%)";
-var SEA = "hsl(215, 50%, 50%)";
+var LAND = new HSL(120, 25, 50);
+var SAND = new HSL(35, 30, 75);
+var SURF = new HSL(210, 60, 55);
+var SEA = new HSL(215, 50, 50);
+var M = 3;
+var LAG = 40;
+
+var ctx = CANVAS.getContext("2d");
+var time = new Time();
+var points = randomPoints(M);
+var threshold = randomThreshold();
+
+function Time() {
+    this.accu = 0;
+    this.rate = 1;
+    this.crest = LAG;
+}
+
+function HSL(h, s, l) {
+    this.h = h;
+    this.s = s;
+    this.l = l;
+}
+
+function renderHSL(color) {
+    return "hsl(" + color.h + ", " + color.s + "%, " + color.l + "%)";
+}
+
+function RandomPoint() {
+    this.x = Math.floor(Math.random() * CANVAS.width);
+    this.y = Math.floor(Math.random() * CANVAS.height);
+}
+
+function randomPoints(n) {
+    var points = Array(n);
+    for (i = 0; i < n; i++) {
+        points[i] = new RandomPoint();
+    }
+    return points;
+}
+
+function randomNoise(x) {
+    return (Math.random() * (x * 2)) + (1 - x);
+}
+
+function randomThreshold() {
+    return Math.floor(Math.random() * (CANVAS.width - 300)) + 100;
+}
 
 function distance(ax, ay, bx, by) {
     return Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
 }
 
-function terrain(point, threshold, x, y) {
-    var d = distance(point.x, point.y, x, y);
-    var noise = (Math.random() * 0.2) + 0.9;
-    if ((d *= noise) > threshold) {
-        return SEA;
+function flowTerrain(x, y) {
+    var n = points.length;
+    var d = 0;
+    for (k = 0; k < n; k++) {
+        d += distance(points[k].x, points[k].y, x, y);
+    }
+    var z = (
+        points.map(function(point) {
+            return distance(point.x, point.y, x, y);
+        }).reduce(function(a, b) {
+            return Math.min(a, b);
+        }) + ((d / n) * 2)
+    ) / 4;
+    var t = (
+        (time.accu * randomNoise(0.05)) +
+        ((threshold * (4 / 5)) * randomNoise(0.001))
+    );
+    var color;
+    if (z > (threshold * randomNoise(0.05)) + time.accu) {
+        color = SEA;
+    } else if (z > t) {
+        color = SURF;
+    } else if (z > (threshold * (1 / 5))) {
+        color = SAND;
     } else {
-        return LAND;
+        color = LAND;
+    }
+    return renderHSL(color);
+}
+
+function flowTime() {
+    if (time.accu % 75 === 0) {
+        if (time.crest === 0) {
+            time.crest = LAG;
+            time.rate *= -1;
+            time.accu += time.rate;
+        } else {
+            time.crest -= 1;
+        }
+    } else {
+        time.accu += time.rate;
     }
 }
 
-function drawBackground() {
-    var point =
-        { x: Math.floor(Math.random() * CANVAS.width)
-        , y: Math.floor(Math.random() * CANVAS.height)
-        };
-    var threshold = Math.floor(Math.random() * 200) + 100;
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            x = i * X;
-            y = j * Y;
-            CTX.fillStyle = terrain(point, threshold, x, y);
-            CTX.fillRect(x, y, X, Y);
+function drawMap() {
+    for (i = 0; i < (N - 1); i++) {
+        for (j = 0; j < (N - 1); j++) {
+            x = (i * X) + (X / 2);
+            y = (j * Y) + (Y / 2);
+            ctx.fillStyle = flowTerrain(x, y);
+            ctx.fillRect(x, y, X, Y);
         }
     }
 }
 
+function loop() {
+    drawMap();
+    flowTime();
+}
+
 window.onload = function() {
-    CTX.fillStyle = "black";
-    CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
-    document.addEventListener("click", drawBackground);
+    ctx.lineWidth = 5;
+    ctx.strokeRect(0, 0, CANVAS.width, CANVAS.height);
+    document.addEventListener("click", function() {
+        points = randomPoints(M);
+        threshold = randomThreshold();
+    });
+    setInterval(loop, 1000 / 25);
 };
