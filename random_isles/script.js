@@ -122,5 +122,5 @@ window.onload = function() {
         points = randomPoints(M);
         threshold = randomThreshold();
     });
-    setInterval(loop, 1000 / 25);
+    setInterval(loop, 1000 / 10);
 };
