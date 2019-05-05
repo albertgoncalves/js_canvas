@@ -4,6 +4,7 @@ var fps = document.getElementById("fps");
 var ctx = CANVAS.getContext("2d");
 var player = new Player(90, 90, 15, 15, 15);
 var time = new Time(0.2);
+var mouse = new Mouse();
 
 function Player(x, y, height, width, speed) {
     this.width = width;
@@ -21,6 +22,11 @@ function Time(rate) {
     this.accu = 0;
     this.rate = rate;
     this.now = Date.now();
+}
+
+function Mouse() {
+    this.x = null;
+    this.y = null;
 }
 
 function drawBackground() {
@@ -81,7 +87,14 @@ function loop() {
     drawPlayer();
 }
 
+function mousePosition(event) {
+    bounds = CANVAS.getBoundingClientRect();
+    mouse.x = event.clientX - bounds.left;
+    mouse.y = event.clientY - bounds.top;
+}
+
 window.onload = function() {
     document.addEventListener("keydown", keyDown);
+    document.addEventListener("mousedown", mousePosition);
     setInterval(loop, 1000 / 60);
 };
