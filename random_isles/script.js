@@ -77,7 +77,7 @@ function flowTerrain(x, y) {
         color = SEA;
     } else if (z > t) {
         color = SURF;
-    } else if (z > (threshold * (1 / 5))) {
+    } else if (z > (threshold * (2 / 5))) {
         color = SAND;
     } else {
         color = LAND;
