@@ -1,3 +1,11 @@
+html, body {
+    font-family: monospace;
+}
+
+.info {
+    font-size: 16px;
+}
+
 .center {
     position: absolute;
     left: 50%;
