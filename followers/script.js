@@ -3,7 +3,7 @@ var HEIGHT = 700;
 var SCALE = 220;
 var SPEED = 1 / 250;
 var K = 0.55;
-var RADIUS = 30;
+var RADIUS = 20;
 var COLOR = {"max": 255, "min": 0};
 var ALPHA = {"max": 90, "min": 20};
 
@@ -13,11 +13,9 @@ var color = COLOR.min;
 var colorDelta = 0.15;
 var alpha = ALPHA.max;
 var alphaDelta = 0.15;
-var x = 0;
-var y = 0;
-var mouseX = WIDTH;
-var mouseY = HEIGHT;
-var n = 8;
+var mouseX = WIDTH / 2;
+var mouseY = HEIGHT / 2;
+var n = 25;
 var squares = new Array(n);
 for (var i = 0; i < n; i++) {
     squares[i] = new Square();
@@ -53,15 +51,15 @@ function distance(aX, aY, bX, bY) {
 }
 
 function move(a, b, c, d, limit) {
-    if (a > limit) {
+    if ((a + RADIUS) > limit) {
         return a - 1;
-    } else if (a < 0) {
+    } else if ((a - RADIUS) < 0) {
         return a + 1;
     } else {
         var r = Math.random();
-        if (r > 0.8) {
+        if (r > 0.85) {
             return a + ((b - a) * SPEED);
-        } else if (r > 0.6) {
+        } else if (r > 0.55) {
             return a - ((c - a) * SPEED);
         } else {
             return a + ((d - a) * SPEED);
