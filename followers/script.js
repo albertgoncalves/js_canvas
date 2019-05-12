@@ -1,9 +1,9 @@
-var WIDTH = 400;
+var WIDTH = 700;
 var HEIGHT = 700;
 var SCALE = 220;
 var SPEED = 1 / 250;
 var K = 0.55;
-var RADIUS = 20;
+var RADIUS = 30;
 var COLOR = {"max": 255, "min": 0};
 var ALPHA = {"max": 90, "min": 20};
 
