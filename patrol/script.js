@@ -16,10 +16,10 @@ var alpha = ALPHA.max;
 var alphaDelta = 0.15;
 
 function init() {
-    canvas = document.createElement('canvas');
+    canvas = document.createElement("canvas");
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
-    context = canvas.getContext('2d');
+    context = canvas.getContext("2d");
     document.body.appendChild(canvas);
 }
 
