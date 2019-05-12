@@ -4,7 +4,7 @@ var SCALE = 225;
 var SPEED = 2 / 10000;
 var K = 0.55;
 var RADIUS = 20;
-var Z = [25, 50, 75, 90, 200, 225, 250];
+var Z = [5, 10, 25, 40, 50, 75, 90, 100, 200, 210, 225, 250, 300, 500];
 var COLOR = {"max": 255, "min": 0};
 var ALPHA = {"max": 90, "min": 20};
 
@@ -38,7 +38,7 @@ function formatColor(h, a) {
 
 function animateCircle(z) {
     var time = ((Date.now() * SPEED) + z) * (z / 100);
-    var x = (Math.sin(time) * SCALE) + (WIDTH / 2);
+    var x = (Math.sin(time * (1 / K)) * SCALE) + (WIDTH / 2);
     var y = (Math.cos(time * K) * SCALE) + (HEIGHT / 2);
     context.fillStyle = formatColor(color, alpha);
     drawCircle(x, y);
