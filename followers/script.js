@@ -57,8 +57,8 @@ function checkBounds(pos, limit) {
 
 function move(pos, near, mouse) {
     var next = {
-        "x": pos.x + ((mouse.x - pos.x) * SPEED),
-        "y": pos.y + ((mouse.y - pos.y) * SPEED),
+        "x": pos.x + Math.sin((mouse.x - pos.x) * SPEED),
+        "y": pos.y + Math.sin((mouse.y - pos.y) * SPEED),
     };
     var threshold = distance(pos.x, pos.y, mouse.x, mouse.y);
     var gap = distance(pos.x, pos.y, near.x, near.y);
