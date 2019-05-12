@@ -22,6 +22,7 @@ function Time(rate) {
     this.accu = 0;
     this.rate = rate;
     this.now = Date.now();
+    this.flicker = 60;
 }
 
 function Mouse() {
@@ -48,9 +49,12 @@ function flowTime() {
 }
 
 function updateFPS() {
-    if (Math.floor(time.accu) % 30 === 0) {
+    if (time.flicker > 60) {
         elapsed = 1 / ((Date.now() - time.now) / 1000);
         fps.innerHTML = String(Math.floor(elapsed)) + " fps";
+        time.flicker = 0;
+    } else {
+        time.flicker += 1;
     }
     time.now = Date.now();
 }
