@@ -60,7 +60,7 @@ function updateFPS() {
 }
 
 function keyDown(event) {
-    switch(event.keyCode) {
+    switch (event.keyCode) {
     case 37:
         if (player.x > player.minX) {
             player.x -= player.speed;

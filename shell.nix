@@ -2,6 +2,7 @@
 with pkgs; mkShell {
     name = "JavaScript";
     buildInputs = [
+        clang-tools
         htmlTidy
         nodejs-8_x
     ];

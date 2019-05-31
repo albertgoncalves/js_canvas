@@ -82,7 +82,6 @@ function loop() {
     alpha = cycle(alpha.value, alpha.delta, ALPHA.min, ALPHA.max);
 }
 
-
 window.onload = function() {
     init();
     loop();

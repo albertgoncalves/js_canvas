@@ -55,23 +55,25 @@ function distance(ax, ay, bx, by) {
     return Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
 }
 
+function fz(points, x, y, n, d) {
+    function f(point) {
+        return distance(point.x, point.y, x, y);
+    }
+    function g(a, b) {
+        return Math.min(a, b);
+    }
+    return (points.map(f).reduce(g) + ((d / n) * 2)) / 4;
+}
+
 function flowTerrain(x, y) {
     var n = points.length;
     var d = 0;
     for (k = 0; k < n; k++) {
         d += distance(points[k].x, points[k].y, x, y);
     }
-    var z = (
-        points.map(function(point) {
-            return distance(point.x, point.y, x, y);
-        }).reduce(function(a, b) {
-            return Math.min(a, b);
-        }) + ((d / n) * 2)
-    ) / 4;
-    var t = (
-        (time.accu * randomNoise(0.05)) +
-        ((threshold * (4 / 5)) * randomNoise(0.001))
-    );
+    var z = fz(points, x, y, n, d);
+    var t = (time.accu * randomNoise(0.05)) +
+        ((threshold * (4 / 5)) * randomNoise(0.001));
     var color;
     if (z > (threshold * randomNoise(0.05)) + time.accu) {
         color = SEA;
