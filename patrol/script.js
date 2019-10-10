@@ -53,7 +53,6 @@ function cycle(value, delta, min, max) {
 }
 
 function loop() {
-    requestAnimationFrame(loop);
     context.clearRect(0, 0, WIDTH, HEIGHT);
     for (var i in Z) {
         animateCircle(Z[i]);
@@ -64,6 +63,7 @@ function loop() {
     alphaCycle = cycle(alpha, alphaDelta, ALPHA.min, ALPHA.max);
     alpha = alphaCycle.value;
     alphaDelta = alphaCycle.delta;
+    requestAnimationFrame(loop);
 }
 
 window.onload = function() {
